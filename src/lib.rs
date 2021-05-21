@@ -445,7 +445,7 @@ impl NumberFormat {
     /// The method takes in a string specifier and a number and returns the string representation
     /// of the formatted number.
     pub fn format<T: Into<f64>>(&self, pattern: &str, input: T) -> String {
-        let format_spec = self.parse_pattern(pattern);
+        let format_spec = NumberFormat::parse_pattern(pattern);
         self.format_with_spec(&format_spec, input)
     }
 
