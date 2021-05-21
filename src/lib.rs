@@ -145,7 +145,7 @@ pub struct NumberFormat {
 
 /// Represents a destructured specification of a provided format pattern string.
 #[derive(Debug)]
-struct FormatSpec<'a> {
+pub struct FormatSpec<'a> {
     zero: bool,
     fill: Option<&'a str>,
     align: Option<&'a str>,
@@ -315,10 +315,10 @@ impl NumberFormat {
                             0,
                             precision
                                 .map(|p| (p - i.abs() as i32 - 1) as usize)
-                                .unwrap()
-                        )))
+                                .unwrap(),
+                        ))),
                     )
-                    .0
+                        .0
                 ),
                 prefix_exponent,
             )
@@ -332,7 +332,7 @@ impl NumberFormat {
     /// details changes.
     ///
     /// The format spec pattern is the following: [[fill]align][sign][symbol][0][width][,][.precision][type]
-    fn parse_pattern<'a>(&self, pattern: &'a str) -> FormatSpec<'a> {
+    pub fn parse_pattern<'a>(&self, pattern: &'a str) -> FormatSpec<'a> {
         let re =
             Regex::new(r"^(?:(.)?([<>=^]))?([+\- ])?([$#])?(0)?(\d+)?(,)?(\.\d+)?([A-Za-z%])?$")
                 .unwrap();
@@ -440,12 +440,19 @@ impl NumberFormat {
         }
     }
 
+
     /// Format a number to a specific human readable form defined by the format spec pattern.
     /// The method takes in a string specifier and a number and returns the string representation
     /// of the formatted number.
     pub fn format<T: Into<f64>>(&self, pattern: &str, input: T) -> String {
         let format_spec = self.parse_pattern(pattern);
+        self.format_with_spec(&format_spec, input)
+    }
 
+    /// Format a number to a specific human readable form defined by the format spec pattern.
+    /// The method takes in a string specifier and a number and returns the string representation
+    /// of the formatted number.
+    pub fn format_with_spec<T: Into<f64>>(&self, format_spec: &FormatSpec, input: T) -> String {
         let input_f64: f64 = input.into();
         let mut value_is_negative: bool = input_f64.is_sign_negative();
 
