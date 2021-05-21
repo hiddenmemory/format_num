@@ -332,7 +332,7 @@ impl NumberFormat {
     /// details changes.
     ///
     /// The format spec pattern is the following: [[fill]align][sign][symbol][0][width][,][.precision][type]
-    pub fn parse_pattern<'a>(&self, pattern: &'a str) -> FormatSpec<'a> {
+    pub fn parse_pattern(pattern: &str) -> FormatSpec {
         let re =
             Regex::new(r"^(?:(.)?([<>=^]))?([+\- ])?([$#])?(0)?(\d+)?(,)?(\.\d+)?([A-Za-z%])?$")
                 .unwrap();
